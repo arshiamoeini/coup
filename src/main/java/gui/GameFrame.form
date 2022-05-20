@@ -9,11 +9,12 @@
     <children>
       <grid id="442b8" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="North"/>
-        <properties/>
+        <properties>
+          <preferredSize width="48" height="150"/>
+        </properties>
         <border type="none"/>
         <children>
-          <grid id="2607f" binding="thirdSeat" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="2607f" binding="thirdSeat" layout-manager="GridBagLayout">
             <constraints border-constraint="Center"/>
             <properties/>
             <border type="none"/>
@@ -37,27 +38,31 @@
       </grid>
       <grid id="4a61e" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="South"/>
-        <properties/>
+        <properties>
+          <preferredSize width="48" height="170"/>
+        </properties>
         <border type="none"/>
         <children>
-          <grid id="e2e35" binding="CharacterActions" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="e2e35" binding="characterActions" layout-manager="GridBagLayout">
             <constraints border-constraint="West"/>
-            <properties/>
-            <border type="none"/>
+            <properties>
+              <preferredSize width="180" height="24"/>
+            </properties>
+            <border type="none" title="Character Actions"/>
             <children/>
           </grid>
-          <grid id="7c419" binding="firstSeat" layout-manager="BorderLayout" hgap="0" vgap="0">
+          <grid id="7c419" binding="firstSeat" layout-manager="GridBagLayout">
             <constraints border-constraint="Center"/>
             <properties/>
             <border type="none"/>
             <children/>
           </grid>
-          <grid id="52fff" binding="generalActions" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="52fff" binding="generalActions" layout-manager="GridBagLayout">
             <constraints border-constraint="East"/>
-            <properties/>
-            <border type="none"/>
+            <properties>
+              <preferredSize width="180" height="24"/>
+            </properties>
+            <border type="none" title="General Actions"/>
             <children/>
           </grid>
         </children>
@@ -67,17 +72,19 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="d27e4" binding="forthSeat" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="d27e4" binding="forthSeat" layout-manager="GridBagLayout">
             <constraints border-constraint="East"/>
-            <properties/>
+            <properties>
+              <preferredSize width="250" height="0"/>
+            </properties>
             <border type="none"/>
             <children/>
           </grid>
-          <grid id="3e50f" binding="secondSeat" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="3e50f" binding="secondSeat" layout-manager="GridBagLayout">
             <constraints border-constraint="West"/>
-            <properties/>
+            <properties>
+              <preferredSize width="250" height="0"/>
+            </properties>
             <border type="none"/>
             <children/>
           </grid>

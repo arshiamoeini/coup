@@ -12,7 +12,7 @@ public class GameFrame extends JFrame implements Configured {
     private static final int MAIN_HEIGHT;
     static {
         Config config = Configured.getConfig(GameFrame.class.getName());
-        MAIN_WIDTH = config.getInt("with");
+        MAIN_WIDTH = config.getInt("width");
         MAIN_HEIGHT = config.getInt("height");
     }
 
@@ -22,7 +22,7 @@ public class GameFrame extends JFrame implements Configured {
     private JPanel thirdSeat;
     private JPanel forthSeat;
     private JPanel generalActions;
-    private JPanel CharacterActions;
+    private JPanel characterActions;
     private JPanel courtPanel;
     private JPanel eventRecorderPanel;
     private JList list1;
@@ -44,9 +44,32 @@ public class GameFrame extends JFrame implements Configured {
         setLayout(null);
         setContentPane(pane);
 
-        repaint();
-        validate();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public void showActionsLists() {
+        generalActions.add(ActionsList.getGeneralInstance());
+        characterActions.add(ActionsList.getCharacterInstance());
+    }
+
+    public void setHand(JPanel playerHand, int index) {
+        switch (index) {
+            case 0:
+                firstSeat.add(playerHand);
+                break;
+            case 1:
+                secondSeat.add(playerHand);
+                break;
+            case 2:
+                thirdSeat.add(playerHand);
+                break;
+            default:
+                forthSeat.add(playerHand);
+        }
+    }
+    public void update() {
+        repaint();
+        revalidate();
     }
 }

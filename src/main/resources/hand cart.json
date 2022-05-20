@@ -1,4 +1,15 @@
 {
   "table": {
+    "ali first cart": "DUKE",
+    "ali second cart": "CAPTAIN",
+
+    "paranoid first cart": "DUKE",
+    "paranoid second cart": "AMBASSADOR",
+
+    "revolutionary first cart": "CONTESSA",
+    "revolutionary second cart": "AMBASSADOR",
+
+    "cautious killer first cart": "ASSASSIN",
+    "cautious killer second cart": "CAPTAIN"
   }
 }

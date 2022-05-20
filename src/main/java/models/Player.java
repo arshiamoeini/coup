@@ -2,6 +2,9 @@ package models;
 
 import config.Config;
 import config.Configured;
+import gui.ActionsList;
+import logic.Command;
+import logic.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,21 +20,25 @@ public abstract class Player implements Configured {
 
     private int coins = 2;
 
-    public Player(String name, Cart firstCart, Cart secondCart) {
+    public Player(String name) {
         this.seatNumber = config.getInt(name) - 1; //turn to 0-base
         this.name = name;
-        carts.add(firstCart);
-        carts.add(secondCart);
 
         memory.memorizePlayer(this, seatNumber);
     }
 
     public void tryToPlay() {
-        //TODO
-        play();
-        next().tryToPlay();
+        if (!isAlive()) next().tryToPlay(); //continue
+
+        if (memory.numberOfAlivePlayer() == 1) {
+            Command.getInstance().showWiner(this);
+        } else {
+            Command.getInstance().showPlayer(seatNumber);
+            play();
+            if (! (this instanceof User)) next().tryToPlay(); //wait for command system
+        }
     }
-    private boolean isAlive() {
+    protected boolean isAlive() {
         return !carts.isEmpty();
     }
     public abstract void play();
@@ -40,101 +47,134 @@ public abstract class Player implements Configured {
         return memory.getPlayer((seatNumber + 1) % 4);
     }
 
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+    public int getCoins() {
+        return coins;
+    }
+    public String getName() {
+        return name;
+    }
+    public ArrayList<Cart> getCarts() {
+        return carts;
+    }
+    public ArrayList<Cart> getDeadCarts() {
+        return deadCarts;
+    }
+
+    public void addCart(Cart cart) {
+        carts.add(cart);
+    }
+
+    public enum Result {
+        CAN_NOT,
+        UNSUCCESSFUL,
+        SUCCESSFUL,
+    }
     // general action methods
     // two type of action: () -> boolean , int -> boolean
-    public boolean earnMoney() {
+    public Result earnMoney() {
         memory.memorizeEarnMoney(seatNumber);
         ++coins;
-        return true;
+        return Result.SUCCESSFUL;
     }
-    public boolean receiveForeignAid() {
+    public Result receiveForeignAid() {
         memory.memorizeReceiveForeignAid(seatNumber);
         if (askForReactionWithReceiveForeignAid()) {
             coins += 2;
-            return true;
+            return Result.SUCCESSFUL;
         }
-        return false;
+        return Result.UNSUCCESSFUL;
     }
-    public boolean exchangeCard(int cardIndex) {
-        if (coins < 1) return false;
-        memory.memorizeExchangeCard(seatNumber);
+    public Result exchangeCard(int cartIndex) {
+        if (coins < 1) return Result.CAN_NOT;
+        memory.memorizeExchangeCard(seatNumber, cartIndex);
         --coins;
         Cart cart = takeOneCartToExchange();
         Court.getInstance().returnCarts(Arrays.asList(cart));
-        return true;
+        return Result.SUCCESSFUL;
     }
-    public boolean coup(int playerIndex) {
-        if (coins < 7) return false;
+    public Result coup(int playerIndex) {
+        if (coins < 7) return Result.CAN_NOT;
         memory.memorizeCoup(seatNumber, playerIndex);
         coins -= 7;
         memory.getPlayer(playerIndex).toBeKilled();
-        return true;
+        return Result.SUCCESSFUL;
     }
 
     // character action methods
-    public boolean taxCollection() {
+    public Result taxCollection() {
         if (askForChallenge() && askForReactionWithReceiveForeignAid()) {
             memory.memorizeTaxCollection(seatNumber);
             coins += 3;
-            return true;
+            return Result.SUCCESSFUL;
         }
-        return false;
+        return Result.UNSUCCESSFUL;
     }
-    public boolean murder(int playerIndex) {
-        if (coins < 3) return  false;
+    public Result murder(int playerIndex) {
+        if (coins < 3) return Result.CAN_NOT;
         coins -= 3;
         memory.memorizeMurder(seatNumber, playerIndex);
         if (askForChallenge() && askForReactionWithMurder()) {
             memory.getPlayer(playerIndex).toBeKilled();
-            return true;
+            return Result.SUCCESSFUL;
         }
-        return false;
+        return Result.UNSUCCESSFUL; //its lost turn
     }
 
-    public boolean corruption(int playerIndex) {
+    public Result corruption(int playerIndex) {
         //ki challenge ki reaction
         if (askForChallenge() && askForReactionWithCorruption()) {
             memory.memorizeCorruption(seatNumber, playerIndex);
             coins += memory.getPlayer(playerIndex).toBeRansom();
-            return true;
+            return Result.SUCCESSFUL;
         }
-        return false;
+        return Result.UNSUCCESSFUL;
     }
 
-    public boolean exchange() {
-        if (coins < 2) return false;
+    public Result exchange() {
+        if (coins < 2) return Result.CAN_NOT;
         if (askForChallenge()) {
             memory.memorizeExchange(seatNumber);
             coins -= 2;
             ArrayList<Cart> carts = Court.getTwoCart();
             Court.getInstance().returnCarts(changeCart(carts));
-            return true;
+            return Result.SUCCESSFUL;
         }
-        return false;
+        return Result.UNSUCCESSFUL;
     }
 
     // reaction methods
-    public boolean preventMurder(int playerIndex) {
+    public Result preventMurder(int playerIndex) {
+        if (!isAlive()) return Result.CAN_NOT;
+
         memory.memorizePreventMurder(seatNumber, playerIndex);
-        return askForChallenge();
+        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
     }
-    public boolean preventCorruption(int playerIndex) {
+    public Result preventCorruption(int playerIndex) {
+        if (!isAlive()) return Result.CAN_NOT;
+
         memory.memorizePreventCorruption(seatNumber, playerIndex);
-        return askForChallenge();
+        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
     }
-    public boolean preventReceiveForeignAid(int playerIndex) {
+    public Result preventReceiveForeignAid(int playerIndex) {
+        if (!isAlive()) return Result.CAN_NOT;
+
         memory.memorizePreventReceiveForeignAid(seatNumber, playerIndex);
-        return askForChallenge();
+        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
     }
 
     // risky method
-    public boolean challenge(int playerIndex) {
+    public Result challenge(int playerIndex) {
+        if (!isAlive()) return Result.CAN_NOT;
+
         if (prove(memory.getClaimedCard())) {
             toBeKilled();
-            return false;
+            return Result.UNSUCCESSFUL;
         } else {
             memory.getPlayer(playerIndex).toBeKilled();
-            return true;
+            return Result.SUCCESSFUL;
         }
     }
 
@@ -144,7 +184,7 @@ public abstract class Player implements Configured {
         for (int t = 0;t < 3;++t) {
             if(player.decisionToChallenge()) {
                 //it will challenge
-                if (player.challenge(seatNumber)) {
+                if (player.challenge(seatNumber) == Result.SUCCESSFUL) {
                     return false;
                 } else {
                     return true;
@@ -159,7 +199,7 @@ public abstract class Player implements Configured {
         for (int t = 0;t < 3;++t) {
             if(player.decisionToPreventMurder(seatNumber)) {
                 //it will challenge
-                if (player.preventReceiveForeignAid(seatNumber)) {
+                if (player.preventReceiveForeignAid(seatNumber) == Result.SUCCESSFUL) {
                     return false;
                 } else {
                     return true;
@@ -174,7 +214,7 @@ public abstract class Player implements Configured {
         for (int t = 0;t < 3;++t) {
             if(player.decisionToPreventReceiveForeignAid(seatNumber)) {
                 //it will challenge
-                if (player.preventMurder(seatNumber)) {
+                if (player.preventMurder(seatNumber) == Result.SUCCESSFUL) {
                     return false;
                 } else {
                     return true;
@@ -189,7 +229,7 @@ public abstract class Player implements Configured {
         for (int t = 0;t < 3;++t) {
             if(player.decisionToPreventCorruption(seatNumber)) {
                 //it will challenge
-                if (player.preventCorruption(seatNumber)) {
+                if (player.preventCorruption(seatNumber) == Result.SUCCESSFUL) {
                     return false;
                 } else {
                     return true;
@@ -202,6 +242,9 @@ public abstract class Player implements Configured {
 
     private boolean prove(Cart claimedCard) {
         return false;
+    }
+    protected void discard(int index) {
+        deadCarts.add(carts.remove(index));
     }
     private int toBeRansom() {
         return 0;

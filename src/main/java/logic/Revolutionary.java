@@ -1,16 +1,18 @@
-package models;
+package logic;
+
+import models.Cart;
+import models.Player;
 
 import java.util.ArrayList;
 
-public class User extends Player {
+public class Revolutionary  extends Player {
 
-    public User(String name, Cart firstCart, Cart secondCart) {
-        super(name, firstCart, secondCart);
+    public Revolutionary(String name) {
+        super(name);
     }
-
     @Override
     public void play() {
-        this.earnMoney();
+
     }
 
     @Override

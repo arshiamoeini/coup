@@ -6,6 +6,7 @@ import gui.GameFrame;
 import models.Court;
 import models.Player;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -23,6 +24,7 @@ public class ConfigHandler {
     }
 
     public static String SOURCE = "src/main/resources/";
+    public static String IMAGE_SOURCE = SOURCE+"cart image/";
     public static Gson GSON;
     static {
         GsonBuilder builder = new GsonBuilder();
@@ -68,5 +70,9 @@ public class ConfigHandler {
     }
     public Config getConfig(String name) {
         return table.get(name);
+    }
+
+    public ImageIcon getImage(String dir) {
+        return new ImageIcon(IMAGE_SOURCE+dir+".jpg");
     }
 }

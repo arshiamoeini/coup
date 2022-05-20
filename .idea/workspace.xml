@@ -5,28 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c712996a-9b7d-4c51-8d07-24e5ac3bc60d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/config/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/config/Configured.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/PanelDesigner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/Cart.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/Court.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/Memory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/hand cart.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/player seats.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/ActionsList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/BotHand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/UserHand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/ObjectiveActionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SelectingHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SubjectiveActionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/ambassador.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/assassin.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/backward.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/captain.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/contessa.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/duke.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/manual1.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/manual2.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/game frame properties.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/config/Configured.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Configured.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Court.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Court.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Memory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hand cart.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hand cart.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/player seats.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/player seats.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,17 +69,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -110,14 +123,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/config/Configured.java</url>
-          <line>8</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/src/main/java/gui/PlayerHand.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/models/Player.java</url>
-          <line>20</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/src/main/java/logic/User.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

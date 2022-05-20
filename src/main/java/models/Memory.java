@@ -1,9 +1,14 @@
 package models;
 
+import logic.User;
+
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 public class Memory {
     public static Player[] players = new Player[4];
+    public static User user;
 
     public Player getPlayer(int index) {
         return players[index];
@@ -11,6 +16,14 @@ public class Memory {
 
     public Cart getClaimedCard() {
         return null;
+    }
+
+    public int numberOfAlivePlayer() {
+        int counter = 0;
+        for (int i = 0; i < 4; i++) {
+            if (players[i].isAlive()) ++counter;
+        }
+        return counter;
     }
 
     public class Action {
@@ -21,13 +34,34 @@ public class Memory {
         }
     }
     public enum ObjectiveActionType {
-        COUP,
-        MURDER,
-        CORRUPTION,
-        PREVENT_MURDER,
-        PREVENT_CORRUPTION,
-        PREVENT_RECEIVE_FOREIGN_AID,
-        CHALLENGE,
+        COUP(true, "coup", user::coup),
+        MURDER(true, "murder", user::murder),
+        CORRUPTION(true, "corruption", user::corruption),
+        EXCHANGE_CARD(true, "exchange card", user::exchangeCard),
+        PREVENT_MURDER(false, "prevent murder", user::preventMurder),
+        PREVENT_CORRUPTION(false, "prevent corruption", user::preventCorruption),
+        PREVENT_RECEIVE_FOREIGN_AID(false, "prevent receive foreign aid", user::preventReceiveForeignAid),
+        CHALLENGE(false, "challenge", user::challenge);
+
+        private String message;
+        private Function<Integer, Player.Result> function;
+        private boolean action;
+
+        ObjectiveActionType(boolean action, String message, Function<Integer, Player.Result> function) {
+            this.action = action;
+            this.message = message;
+            this.function = function;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+        public Function<Integer, Player.Result> getFunction() {
+            return function;
+        }
+        public boolean isAction() {
+            return action;
+        }
     }
     public class ObjectiveAction extends Action {
         private ObjectiveActionType type;
@@ -41,11 +75,25 @@ public class Memory {
     }
 
     public enum SubjectiveActionType {
-        ERAN_MONEY,
-        RECEIVE_FOREIGN_AID,
-        EXCHANGE_CARD,
-        TAX_COLLECTION,
-        EXCHANGE,
+        ERAN_MONEY("earn money", user::earnMoney),
+        RECEIVE_FOREIGN_AID("receive foreign aid", user::receiveForeignAid),
+        TAX_COLLECTION("tax collection", user::taxCollection),
+        EXCHANGE("exchange", user::exchange);
+
+        private String message;
+        private Callable<Player.Result> function;
+
+        SubjectiveActionType(String message, Callable<Player.Result> function) {
+            this.message = message;
+            this.function = function;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+        public Callable<Player.Result> getFunction() {
+            return function;
+        }
     }
     public class SubjectiveAction extends Action {
         private SubjectiveActionType type;
@@ -65,6 +113,7 @@ public class Memory {
             System.out.println("error same seat");
             throw new RuntimeException();
         } else {
+            if (player instanceof User) user = (User) player;
             players[playerSeat] = player;
         }
     }
@@ -75,8 +124,8 @@ public class Memory {
     public void memorizeReceiveForeignAid(int player) {
         memory.add(new SubjectiveAction(player, SubjectiveActionType.RECEIVE_FOREIGN_AID));
     }
-    public void memorizeExchangeCard(int player) {
-        memory.add(new SubjectiveAction(player, SubjectiveActionType.EXCHANGE_CARD));
+    public void memorizeExchangeCard(int player, int cartIndex) {
+        memory.add(new ObjectiveAction(player, cartIndex, ObjectiveActionType.EXCHANGE_CARD));
     }
     public void memorizeCoup(int player, int object) {
         memory.add(new ObjectiveAction(player, object, ObjectiveActionType.COUP));

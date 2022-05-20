@@ -9,9 +9,10 @@ public enum Cart {
     ASSASSIN,
     CONTESSA;
 
-    private String name;
-    private ImageIcon image;
-
     Cart() {
+    }
+
+    public String getName() {
+        return this.name().toLowerCase();
     }
 }

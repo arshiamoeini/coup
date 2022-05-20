@@ -1,30 +1,44 @@
 package models;
 
+import config.Config;
+import config.Configured;
+import logic.Command;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Court {
+public class Court implements Configured {
     public static Court instance;
 
-    static {
-        instance = new Court();
-    }
 
     private ArrayList<Cart> carts = new ArrayList<>();
-    public Court() {
+    public Court(Player player) {
         for (int t = 0;t < 3;++t) {
+            //three time foreach cart
             Collections.addAll(carts, Cart.values());
         }
-        //TODO read from json
+
         //config two cart for each player str -> cart
+        Config config = Configured.getConfig(Court.class.getName());
+        for (int t = 0; t < 4; t++) {
+            player.addCart(config.getCart(player.getName()+" first cart"));
+            player.addCart(config.getCart(player.getName()+" second cart"));
+            player = player.next();
+        }
     }
 
+    public static void splitCarts(Player player) {
+        //get for take his cart
+        instance = new Court(player);
+    }
     public static Court getInstance() {
         return instance;
     }
 
     public static ArrayList<Cart> getTwoCart() {
+        int[] arr = new int[]{2, 3, 4};
         return null;
     }
 
