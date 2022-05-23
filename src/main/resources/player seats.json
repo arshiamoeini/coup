@@ -1,8 +1,14 @@
 {
   "table": {
-    "ali": "1",
-    "paranoid": "2",
-    "revolutionary": "3",
-    "cautious killer": "4"
+    "ali seat number": "3",
+    "paranoid seat number": "2",
+    "revolutionary seat number": "3",
+    "cautious killer seat number": "4",
+    "cow seat number": "1",
+    "do you want play with ali": true,
+    "do you want play with paranoid": true,
+    "do you want play with cautious killer": true,
+    "do you want play with revolutionary": false,
+    "do you want play with cow": true
   }
 }

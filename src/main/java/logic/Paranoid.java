@@ -2,6 +2,7 @@ package logic;
 
 import models.Cart;
 import models.Player;
+import models.Result;
 
 import java.util.ArrayList;
 
@@ -12,12 +13,13 @@ public class Paranoid extends Player {
     private boolean takeChallenge = true;
 
     @Override
-    public void play() {
-        earnMoney();
+    public Result play() {
+        return earnMoney();
     }
 
     @Override
     protected void toBeKilled() {
+        if (carts.size() == 0) return;
         discard(0);
     }
 

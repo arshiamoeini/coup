@@ -15,6 +15,9 @@ public class Memory {
         return players[index];
     }
 
+    public static void setUser(User user) {
+        Memory.user = user;
+    }
 
     public int numberOfAlivePlayer() {
         int counter = 0;
@@ -22,6 +25,19 @@ public class Memory {
             if (players[i].isAlive()) ++counter;
         }
         return counter;
+    }
+    public int getSomeAlivePlayerFromIndex(int seatNumber) {
+        for (int i = 0; i < 4; i++) if (i != seatNumber){
+            if (players[i].isAlive()) return i;
+        }
+        return -1;
+    }
+
+    public int foundInstanceOf(Class<? extends Player> playerType) {
+        for (int i = 0; i < 4; i++) {
+            if (players[i].getClass() == playerType) return i;
+        }
+        return -1;
     }
 
     public class Action {
@@ -145,7 +161,7 @@ public class Memory {
     };
 
     public Cart getClaimedCard() {
-        Action lastAction = memory.get(memory.size() - 1);
+        Action lastAction = memory.get(memory.size() - 2);
         for(Cart cart: Cart.values()) {
             if (cart.getAction() == lastAction.getActionType()) {
                 return cart;

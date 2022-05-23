@@ -22,4 +22,8 @@ public class Config {
 //        System.out.println(key);
         return Cart.valueOf(table.get(key));
     }
+
+    public boolean getBool(String key) {
+        return Boolean.parseBoolean(table.get(key));
+    }
 }

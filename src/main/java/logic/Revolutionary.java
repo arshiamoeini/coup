@@ -2,6 +2,7 @@ package logic;
 
 import models.Cart;
 import models.Player;
+import models.Result;
 
 import java.util.ArrayList;
 
@@ -11,19 +12,19 @@ public class Revolutionary  extends Player {
         super(name);
     }
     @Override
-    public void play() {
-        if (coins < 7)  taxCollection();
-        else {
-            for (int i = 0; i < 4; i++)  if (i != getSeatNumber()){
-                if (memory.getPlayer(i).isAlive()) {
-                    coup(i);
-                }
+    public Result play() {
+        if (coins < 7) return taxCollection();
+        for (int i = 0; i < 4; i++)  if (i != getSeatNumber()){
+            if (memory.getPlayer(i).isAlive()) {
+                return coup(i);
             }
         }
+        return null;
     }
 
     @Override
     protected void toBeKilled() {
+        if (carts.size() == 0) return;
         for (int i = 0; i < carts.size(); i++) {
             if (carts.get(i) != Cart.DUKE) {
                 discard(i);

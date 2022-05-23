@@ -3,6 +3,7 @@ package config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import gui.GameFrame;
+import gui.Manual;
 import models.Court;
 import models.Player;
 
@@ -37,6 +38,7 @@ public class ConfigHandler {
         temp.put(Court.class.getName(), loadConfig("hand cart"));
         temp.put(Player.class.getName(), loadConfig("player seats"));
         temp.put(GameFrame.class.getName(), loadConfig("game frame properties"));
+        temp.put(Manual.class.getName(), loadConfig("manual properties"));
         table = Collections.unmodifiableMap(temp);
     }
     public static Config loadConfig(String fileName) {

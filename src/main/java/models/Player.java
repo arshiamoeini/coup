@@ -3,7 +3,6 @@ package models;
 import config.Config;
 import config.Configured;
 import logic.Command;
-import logic.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,10 +21,12 @@ public abstract class Player implements Configured {
     protected int coins = 2;
 
     public Player(String name) {
-        this.seatNumber = config.getInt(name) - 1; //turn to 0-base
+        this.seatNumber = config.getInt(name + " seat number") - 1; //turn to 0-base
         this.name = name;
 
-        memory.memorizePlayer(this, seatNumber);
+        if (config.getBool("do you want play with "+name)) {
+            memory.memorizePlayer(this, seatNumber);
+        }
     }
 
     public void tryToPlay() {
@@ -34,6 +35,9 @@ public abstract class Player implements Configured {
             return;
         }
 
+    //    if (memory.numberOfAlivePlayer() == 2) {
+     //       System.out.println(" ");
+     //   }
         if (memory.numberOfAlivePlayer() == 1) {
             Command.getInstance().update();
             Command.getInstance().showWiner(this);
@@ -48,17 +52,18 @@ public abstract class Player implements Configured {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        play();
-
-        if (! (this instanceof User)) {
-            next().tryToPlay(); //wait for command system
-            return;
+        Result result = (coins >= 10) ? forceCoup() : play();
+        if (!result.isNotComplete()) {
+            next().tryToPlay();
         }
+    }
+    public Result forceCoup() {
+        return coup(memory.getSomeAlivePlayerFromIndex(seatNumber));
     }
     public boolean isAlive() {
         return !carts.isEmpty();
     }
-    public abstract void play();
+    public abstract Result play();
 
     public Player next() {
         return memory.getPlayer((seatNumber + 1) % 4);
@@ -203,7 +208,7 @@ public abstract class Player implements Configured {
         Command.getInstance().showChallengeGuy(seatNumber);
         memory.memorizeChallenge(seatNumber, playerIndex);
 
-        if (prove(memory.getClaimedCard())) {
+        if (memory.getPlayer(playerIndex).prove(memory.getClaimedCard())) {
             toBeKilled();
             Command.getInstance().unColorPlayer(seatNumber);
             return new Result(Result.Type.UNSUCCESSFUL, "make wrong!");

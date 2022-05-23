@@ -5,6 +5,8 @@ import config.Configured;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameFrame extends JFrame implements Configured, PanelDesigner {
 
@@ -25,6 +27,7 @@ public class GameFrame extends JFrame implements Configured, PanelDesigner {
     private JPanel characterActions;
     private JPanel courtPanel;
     private JPanel eventRecorderPanel;
+    private JButton manual;
 
     public GameFrame() throws HeadlessException {
         //setting
@@ -44,6 +47,7 @@ public class GameFrame extends JFrame implements Configured, PanelDesigner {
         setContentPane(pane);
         eventRecorderPanel.add(EventRecorderPanel.getInstance());
         courtPanel.add(CourtPanel.getInstance().getPanel());
+        addManual();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
@@ -85,5 +89,14 @@ public class GameFrame extends JFrame implements Configured, PanelDesigner {
 
     public void showOkButton() {
         generalActions.add(ActionsList.getOkButtonForExchange());
+    }
+
+    private void addManual() {
+        manual.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Manual.getInstance().setVisible(true);
+            }
+        });
     }
 }

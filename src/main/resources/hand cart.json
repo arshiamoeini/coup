@@ -10,6 +10,9 @@
     "revolutionary second cart": "AMBASSADOR",
 
     "cautious killer first cart": "ASSASSIN",
-    "cautious killer second cart": "CAPTAIN"
+    "cautious killer second cart": "CAPTAIN",
+
+    "cow first cart": "DUKE",
+    "cow second cart": "CAPTAIN"
   }
 }

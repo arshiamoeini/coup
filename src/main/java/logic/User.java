@@ -1,10 +1,7 @@
 package logic;
 
 import gui.CourtPanel;
-import models.Cart;
-import models.Court;
-import models.Player;
-import models.Result;
+import models.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -22,12 +19,21 @@ public class User extends Player {
     }
 
     @Override
-    public void play() {
+    public Result play() {
         Command.getInstance().showActionsLists();
+        return Result.NOT_COMPLETE;
+    }
+
+    @Override
+    public Result forceCoup() {
+        Command.getInstance().handelObjectiveAction(Memory.ObjectiveActionType.COUP.getFunction());
+        Command.getInstance().update();
+        return Result.NOT_COMPLETE;
     }
 
     @Override
     protected void toBeKilled() {
+        if (carts.size() == 0) return;
         if (carts.size() == 1) {
             discard(0);
             Command.getInstance().confirmUser("you lost!");
@@ -42,7 +48,6 @@ public class User extends Player {
 
     @Override
     protected boolean decisionToPreventMurder(int playerIndex) {
-        //TODO
         return Command.getInstance().askYesNoQuestionWithMessage("do you prevent murder!");
     }
 

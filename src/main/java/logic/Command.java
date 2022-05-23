@@ -28,10 +28,13 @@ public class Command {
 
     public Command() {
         user = new User("ali");
+        Memory.setUser(user);
+   //     Memory.SubjectiveActionType tr = Memory.SubjectiveActionType.TAX_COLLECTION;
         new Paranoid("paranoid");
         new Revolutionary("revolutionary");
         new CautiousKiller("cautious killer");
-        Court.splitCarts(user);
+        new Cow("cow");
+        Court.splitCarts(Memory.players[0]);
 
         madePanelHands();
         showHands();
@@ -68,18 +71,18 @@ public class Command {
         return playerHands[player.getSeatNumber()];
     }
     private void madePanelHands() {
-        playerHands[user.getSeatNumber()] = new UserHand(user.getName());
-        gameFrame.setHand(getHand(user).getPanel(), 0);
-        Player bot = user;
-        for (int t = 0; t < 3; t++) {
-            bot = bot.next();
-            playerHands[bot.getSeatNumber()] = new BotHand(bot.getName());
-            gameFrame.setHand(playerHands[bot.getSeatNumber()].getPanel(), t + 1);
+    //    playerHands[user.getSeatNumber()] = new UserHand(user.getName());
+    //    gameFrame.setHand(getHand(user).getPanel(), 0);
+        Player player = Memory.players[user.getSeatNumber()];
+        for (int t = 0; t < 4; t++) {
+            playerHands[player.getSeatNumber()] = (player instanceof User ?
+                    new UserHand(player.getName()) : new BotHand(player.getName()));
+            gameFrame.setHand(playerHands[player.getSeatNumber()].getPanel(), t);
+            player = player.next();
         }
     }
     private void showHands() {
-        //TODO
-        Player player = user;
+        Player player = Memory.players[0];
         for (int t = 0;t < 4;++t) {
             showHandFor(player);
             player = player.next();
@@ -101,7 +104,7 @@ public class Command {
         return instance;
     }
     public static void start() {
-        instance.user.tryToPlay();
+        Memory.players[0].tryToPlay();
     }
 
     public User getUser() {
@@ -212,8 +215,11 @@ public class Command {
     }
 
     public void addPlayerSelector() {
-        for (int i = 0; i < 4; i++) if (i != user.getSeatNumber()) {
-            ((BotHand) playerHands[i]).addSelector(new SelectingHandler(i){
+        Player player = user;
+        for (int i = 0; i < 3; i++) {
+            player = player.next();
+            if (!player.isAlive()) continue;
+            ((BotHand) playerHands[player.getSeatNumber()]).addSelector(new SelectingHandler(player.getSeatNumber()){
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
@@ -279,36 +285,32 @@ public class Command {
     }
 
     public int addCartSelectorToDiscard() {
+            String[] options = new String[] {"cart1", "cart2"};
+
             JDialog.setDefaultLookAndFeelDecorated(true);
             JOptionPane optionPane = new JOptionPane("select cart to discard",
                     JOptionPane.QUESTION_MESSAGE,
-                    JOptionPane.YES_NO_OPTION, null, new String[] {"cart1", "cart2"});
+                    JOptionPane.YES_NO_OPTION, null, options);
 
 
             JDialog dialog = optionPane.createDialog("Select cart");
             dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
-            Timer timer = new Timer(5000, e -> dialog.setVisible(false));
+            Timer timer = new Timer(10000, e -> dialog.setVisible(false));
             timer.setRepeats(false);
             timer.start();
 
             dialog.setVisible(true);
 
-            if (optionPane.getValue() instanceof Integer) {
-                int option = (Integer) optionPane.getValue();
+            if (optionPane.getValue() instanceof String) {
+                String option = (String) optionPane.getValue();
 
-                if (option == JOptionPane.NO_OPTION) {
-                    return 0;
-                }
-                else if (option == JOptionPane.YES_OPTION) {
-                    return 1;
+                for (int i = 0; i < 2; i++) {
+                    if ((option).equals(options[i])) {
+                        return i;
+                    }
                 }
             }
-            else {
-               return 0;
-            }
-
-            System.out.println("Outside code.");
-            return -1;
+            return 0;
     }
 }
