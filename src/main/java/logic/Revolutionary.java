@@ -12,12 +12,25 @@ public class Revolutionary  extends Player {
     }
     @Override
     public void play() {
-
+        if (coins < 7)  taxCollection();
+        else {
+            for (int i = 0; i < 4; i++)  if (i != getSeatNumber()){
+                if (memory.getPlayer(i).isAlive()) {
+                    coup(i);
+                }
+            }
+        }
     }
 
     @Override
     protected void toBeKilled() {
-
+        for (int i = 0; i < carts.size(); i++) {
+            if (carts.get(i) != Cart.DUKE) {
+                discard(i);
+                return;
+            }
+        }
+        discard(0);
     }
 
     @Override
@@ -41,8 +54,8 @@ public class Revolutionary  extends Player {
     }
 
     @Override
-    protected Cart takeOneCartToExchange() {
-        return null;
+    protected int takeOneCartToExchangeIndex() {
+        return 0;
     }
 
     @Override

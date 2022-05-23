@@ -37,9 +37,9 @@ public class Court implements Configured {
         return instance;
     }
 
-    public static ArrayList<Cart> getTwoCart() {
-        int[] arr = new int[]{2, 3, 4};
-        return null;
+    public ArrayList<Cart> getTwoCart() {
+        shuffle();
+        return new ArrayList<>(Arrays.asList(carts.remove(0), carts.remove(0)));
     }
 
     public void returnCarts(List<Cart> returned) {
@@ -48,5 +48,10 @@ public class Court implements Configured {
 
     public void shuffle() {
         Collections.shuffle(carts);
+    }
+
+    public Cart getACart() {
+        shuffle();
+        return carts.remove(0);
     }
 }

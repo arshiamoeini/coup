@@ -5,11 +5,10 @@ import models.Player;
 
 import java.util.ArrayList;
 
-public class Paranoid extends Player {
-    public Paranoid(String name) {
+public class Cow extends Player {
+    public Cow(String name) {
         super(name);
     }
-    private boolean takeChallenge = true;
 
     @Override
     public void play() {
@@ -38,8 +37,7 @@ public class Paranoid extends Player {
 
     @Override
     protected boolean decisionToChallenge() {
-        takeChallenge = !takeChallenge;
-        return takeChallenge;
+        return false;
     }
 
     @Override

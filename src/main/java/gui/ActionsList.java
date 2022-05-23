@@ -1,8 +1,9 @@
 package gui;
 
-import logic.eventhandler.SubjectiveActionHandler;
+import logic.Command;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ActionsList extends JPanel {
@@ -18,6 +19,25 @@ public class ActionsList extends JPanel {
     }
     public static ActionsList getCharacterInstance() {
         return characterInstance;
+    }
+    public static ActionsList getOkButtonForExchange() {
+        return new ActionsList(){
+            {
+                this.addAction("Done", new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Command.getInstance().removeCourtHandler();
+                        Command.getInstance().removeUserCartHandler();
+                        Command.getInstance().unColorSelectedCart();
+                        Command.getInstance().getUser().doneExchange();
+                        CourtPanel.getInstance().unShowCarts();
+                        Command.getInstance().closeActionLists();
+                        Command.getInstance().update();
+                        Command.getInstance().takeUserTurn();
+                    }
+                });
+            }
+        };
     }
 
     public static void construct() {

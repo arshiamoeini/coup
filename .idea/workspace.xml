@@ -4,42 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c712996a-9b7d-4c51-8d07-24e5ac3bc60d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/ActionsList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/BotHand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/UserHand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/ObjectiveActionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SelectingHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SubjectiveActionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/ambassador.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/assassin.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/backward.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/captain.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/contessa.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/duke.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/manual1.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cart image/manual2.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/game frame properties.json" afterDir="false" />
+    <list default="true" id="c712996a-9b7d-4c51-8d07-24e5ac3bc60d" name="Changes" comment="some gui">
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/ColoringCarts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/CourtPanel.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/CourtPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/EventRecorderPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Cow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/models/Result.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/Configured.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Configured.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/ActionsList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/ActionsList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/BotHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/BotHand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/PlayerHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/UserHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/UserHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/eventhandler/ObjectiveActionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/ObjectiveActionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SubjectiveActionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/eventhandler/SubjectiveActionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Cart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/Court.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Court.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Memory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hand cart.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hand cart.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/player seats.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/player seats.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/game frame properties.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/game frame properties.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,8 +41,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -103,6 +94,14 @@
       <option name="presentableId" value="Default" />
       <updated>1652686199515</updated>
     </task>
+    <task id="LOCAL-00001" summary="some gui">
+      <created>1653021455138</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1653021455138</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -118,22 +117,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="some gui" />
+    <option name="LAST_COMMIT_MESSAGE" value="some gui" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/gui/PlayerHand.java</url>
-          <line>43</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/logic/User.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="java.util.Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry" memberName="key" />

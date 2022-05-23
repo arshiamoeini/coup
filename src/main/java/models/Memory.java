@@ -1,5 +1,6 @@
 package models;
 
+import gui.EventRecorderPanel;
 import logic.User;
 
 import java.util.ArrayList;
@@ -14,9 +15,6 @@ public class Memory {
         return players[index];
     }
 
-    public Cart getClaimedCard() {
-        return null;
-    }
 
     public int numberOfAlivePlayer() {
         int counter = 0;
@@ -32,22 +30,29 @@ public class Memory {
         public Action(int doer) {
             this.doer = doer;
         }
+
+        public String getDoerName() {
+            return players[doer].getName();
+        }
+
+        public Object getActionType() {
+            return null;
+        }
     }
-    public enum ObjectiveActionType {
+    public enum ObjectiveActionType{
         COUP(true, "coup", user::coup),
         MURDER(true, "murder", user::murder),
         CORRUPTION(true, "corruption", user::corruption),
-        EXCHANGE_CARD(true, "exchange card", user::exchangeCard),
         PREVENT_MURDER(false, "prevent murder", user::preventMurder),
         PREVENT_CORRUPTION(false, "prevent corruption", user::preventCorruption),
         PREVENT_RECEIVE_FOREIGN_AID(false, "prevent receive foreign aid", user::preventReceiveForeignAid),
         CHALLENGE(false, "challenge", user::challenge);
 
         private String message;
-        private Function<Integer, Player.Result> function;
+        private Function<Integer, Result> function;
         private boolean action;
 
-        ObjectiveActionType(boolean action, String message, Function<Integer, Player.Result> function) {
+        ObjectiveActionType(boolean action, String message, Function<Integer, Result> function) {
             this.action = action;
             this.message = message;
             this.function = function;
@@ -56,7 +61,7 @@ public class Memory {
         public String getMessage() {
             return message;
         }
-        public Function<Integer, Player.Result> getFunction() {
+        public Function<Integer, Result> getFunction() {
             return function;
         }
         public boolean isAction() {
@@ -72,18 +77,32 @@ public class Memory {
             this.object = object;
             this.type = type;
         }
+
+        public String getName() {
+            return type.getMessage();
+        }
+
+        public String getObjectName() {
+            return players[object].getName();
+        }
+
+        @Override
+        public Object getActionType() {
+            return type;
+        }
     }
 
     public enum SubjectiveActionType {
         ERAN_MONEY("earn money", user::earnMoney),
         RECEIVE_FOREIGN_AID("receive foreign aid", user::receiveForeignAid),
+        EXCHANGE_CARD("exchange card", user::exchangeCard),
         TAX_COLLECTION("tax collection", user::taxCollection),
         EXCHANGE("exchange", user::exchange);
 
         private String message;
-        private Callable<Player.Result> function;
+        private Callable<Result> function;
 
-        SubjectiveActionType(String message, Callable<Player.Result> function) {
+        SubjectiveActionType(String message, Callable<Result> function) {
             this.message = message;
             this.function = function;
         }
@@ -91,7 +110,7 @@ public class Memory {
         public String getMessage() {
             return message;
         }
-        public Callable<Player.Result> getFunction() {
+        public Callable<Result> getFunction() {
             return function;
         }
     }
@@ -102,9 +121,41 @@ public class Memory {
             super(doer);
             this.type = type;
         }
+
+        public String getName() {
+            return type.getMessage();
+        }
+
+        @Override
+        public Object getActionType() {
+            return type;
+        }
     }
 
-    private ArrayList<Action> memory = new ArrayList<>();
+    private ArrayList<Action> memory = new ArrayList<Action>() {
+        @Override
+        public boolean add(Action action) {
+            if (action instanceof SubjectiveAction) {
+                EventRecorderPanel.getInstance().addSubjectiveAction((SubjectiveAction) action);
+            } else {
+                EventRecorderPanel.getInstance().addObjectiveAction((ObjectiveAction) action);
+            }
+            return super.add(action);
+        }
+    };
+
+    public Cart getClaimedCard() {
+        Action lastAction = memory.get(memory.size() - 1);
+        for(Cart cart: Cart.values()) {
+            if (cart.getAction() == lastAction.getActionType()) {
+                return cart;
+            }
+            if (cart.getReaction() == lastAction.getActionType()) {
+                return cart;
+            }
+        }
+        return null;
+    }
     public Memory() {
     }
 
@@ -124,8 +175,8 @@ public class Memory {
     public void memorizeReceiveForeignAid(int player) {
         memory.add(new SubjectiveAction(player, SubjectiveActionType.RECEIVE_FOREIGN_AID));
     }
-    public void memorizeExchangeCard(int player, int cartIndex) {
-        memory.add(new ObjectiveAction(player, cartIndex, ObjectiveActionType.EXCHANGE_CARD));
+    public void memorizeExchangeCard(int player) {
+        memory.add(new SubjectiveAction(player, SubjectiveActionType.EXCHANGE_CARD));
     }
     public void memorizeCoup(int player, int object) {
         memory.add(new ObjectiveAction(player, object, ObjectiveActionType.COUP));

@@ -2,27 +2,20 @@ package logic.eventhandler;
 
 import logic.Command;
 import models.Player;
+import models.Result;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Function;
 
 public class ObjectiveActionHandler implements ActionListener {
-    private Function<Integer, Player.Result> action;
-    private boolean playerSelector;
-    public ObjectiveActionHandler(Function<Integer, Player.Result> action, boolean playerSelector) {
+    private Function<Integer, Result> action;
+    public ObjectiveActionHandler(Function<Integer, Result> action) {
         this.action = action;
-        this.playerSelector = playerSelector;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Command.getInstance().setSelectedAction(action);
-        if (playerSelector) {
-            Command.getInstance().addPlayerSelector();
-        } else {
-            Command.getInstance().addCartSelectorForExchangeCart();
-        }
         Command.getInstance().handelObjectiveAction(action);
     }
 }

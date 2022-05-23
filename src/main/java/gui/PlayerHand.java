@@ -9,11 +9,14 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 
 public abstract class PlayerHand implements PanelDesigner, Configured {
-    private JPanel panel;
+    protected JPanel panel;
     private JLabel playerName;
     private JPanel coins;
-    private JPanel secondCart;
-    private JPanel firstCart;
+    protected JPanel firstCart1;
+    protected JPanel secondCart1;
+    protected JPanel firstCart;
+    protected JPanel secondCart;
+
 
     public static int WIDTH = 160;
     public static int HEIGHT = 140;
@@ -50,6 +53,7 @@ public abstract class PlayerHand implements PanelDesigner, Configured {
         };
         label.setOpaque(false);
         label.setText("dead");
+        label.setForeground(Color.RED);
         label.setBackground(new Color(145, 133, 132, 90));
         addLabelCart(label);
     }
@@ -62,16 +66,26 @@ public abstract class PlayerHand implements PanelDesigner, Configured {
     }
 
     public void update() {
-
+        panel.repaint();
+        panel.revalidate();
     }
 
     public void removeAll() {
-        panel.setBorder(null);
         firstCart.removeAll();
         secondCart.removeAll();
     }
+    public abstract void removeAllHandler();
+    public static void removeAllMouseListener(JPanel panel) {
+        for (MouseListener listener: panel.getMouseListeners()) {
+            panel.removeMouseListener(listener);
+        }
+    }
+    //BOARD PAINT METHODS
     private void paintBorder(Color color) {
         panel.setBorder(new LineBorder(color, 3));
+       // panel.setBorder();
+       // Border border = new Li
+        //TODO
     }
     public void paintBorderGreen() {
         paintBorder(Color.GREEN);
@@ -79,27 +93,24 @@ public abstract class PlayerHand implements PanelDesigner, Configured {
     public void paintBorderYellow() {
         paintBorder(Color.YELLOW);
     }
+    public void paintBorderRed() {
+        paintBorder(Color.RED);
+    }
+    public void paintBorderBlue() {
+        paintBorder(Color.BLUE);
+    }
+    public void paintBorderOrange() {
+        paintBorder(Color.ORANGE);
+    }
 
-    public void addSelectorForCart(int index, SelectingHandler handler) {
-        addHandler((index == 0 ? firstCart : secondCart) , handler);
+
+    public void unColorBoard() {
+        panel.setBorder(null);
     }
-    public void addSelector(SelectingHandler handler) {
-        addHandler(panel, handler);
-    }
-    private void addHandler(JPanel panel, SelectingHandler handler) {
+
+    //HANDLER ADDER METHODS
+    public static void addHandler(JPanel panel, SelectingHandler handler) {
         handler.setSelectable(panel);
         panel.addMouseListener(handler);
-
-    }
-
-    public void removeAllHandler() {
-        removeAllMouseListener(panel);
-        removeAllMouseListener(firstCart);
-        removeAllMouseListener(secondCart);
-    }
-    public static void removeAllMouseListener(JPanel panel) {
-        for (MouseListener listener: panel.getMouseListeners()) {
-            panel.removeMouseListener(listener);
-        }
     }
 }

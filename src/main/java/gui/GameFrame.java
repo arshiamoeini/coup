@@ -6,7 +6,7 @@ import config.Configured;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameFrame extends JFrame implements Configured {
+public class GameFrame extends JFrame implements Configured, PanelDesigner {
 
     private static final int MAIN_WIDTH;
     private static final int MAIN_HEIGHT;
@@ -25,7 +25,6 @@ public class GameFrame extends JFrame implements Configured {
     private JPanel characterActions;
     private JPanel courtPanel;
     private JPanel eventRecorderPanel;
-    private JList list1;
 
     public GameFrame() throws HeadlessException {
         //setting
@@ -43,6 +42,8 @@ public class GameFrame extends JFrame implements Configured {
 
         setLayout(null);
         setContentPane(pane);
+        eventRecorderPanel.add(EventRecorderPanel.getInstance());
+        courtPanel.add(CourtPanel.getInstance().getPanel());
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
@@ -51,6 +52,10 @@ public class GameFrame extends JFrame implements Configured {
     public void showActionsLists() {
         generalActions.add(ActionsList.getGeneralInstance());
         characterActions.add(ActionsList.getCharacterInstance());
+    }
+    public void closeActionLists() {
+        generalActions.removeAll();
+        characterActions.removeAll();
     }
 
     public void setHand(JPanel playerHand, int index) {
@@ -71,5 +76,14 @@ public class GameFrame extends JFrame implements Configured {
     public void update() {
         repaint();
         revalidate();
+    }
+
+    @Override
+    public JPanel getPanel() {
+        return pane;
+    }
+
+    public void showOkButton() {
+        generalActions.add(ActionsList.getOkButtonForExchange());
     }
 }

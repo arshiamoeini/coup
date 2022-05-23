@@ -2,23 +2,24 @@ package models;
 
 import config.Config;
 import config.Configured;
-import gui.ActionsList;
 import logic.Command;
 import logic.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static java.lang.Thread.sleep;
+
 public abstract class Player implements Configured {
     private static Config config = Configured.getConfig(Player.class.getName());
-    private static Memory memory = new Memory();
+    protected static Memory memory = new Memory();
     int seatNumber; //from 0 to 3
 
     String name;
-    private ArrayList<Cart> carts = new ArrayList<>();
+    protected ArrayList<Cart> carts = new ArrayList<>();
     private ArrayList<Cart> deadCarts = new ArrayList<>();
 
-    private int coins = 2;
+    protected int coins = 2;
 
     public Player(String name) {
         this.seatNumber = config.getInt(name) - 1; //turn to 0-base
@@ -28,17 +29,33 @@ public abstract class Player implements Configured {
     }
 
     public void tryToPlay() {
-        if (!isAlive()) next().tryToPlay(); //continue
+        if (!isAlive()) {
+            next().tryToPlay();
+            return;
+        }
 
         if (memory.numberOfAlivePlayer() == 1) {
+            Command.getInstance().update();
             Command.getInstance().showWiner(this);
-        } else {
-            Command.getInstance().showPlayer(seatNumber);
-            play();
-            if (! (this instanceof User)) next().tryToPlay(); //wait for command system
+            return; //Done calling
+        }
+
+        Command.getInstance().unColor();
+        Command.getInstance().showPlayer(seatNumber);
+        Command.getInstance().update();
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        play();
+
+        if (! (this instanceof User)) {
+            next().tryToPlay(); //wait for command system
+            return;
         }
     }
-    protected boolean isAlive() {
+    public boolean isAlive() {
         return !carts.isEmpty();
     }
     public abstract void play();
@@ -50,9 +67,7 @@ public abstract class Player implements Configured {
     public int getSeatNumber() {
         return seatNumber;
     }
-    public int getCoins() {
-        return coins;
-    }
+    public int getCoins() { return coins; }
     public String getName() {
         return name;
     }
@@ -67,11 +82,7 @@ public abstract class Player implements Configured {
         carts.add(cart);
     }
 
-    public enum Result {
-        CAN_NOT,
-        UNSUCCESSFUL,
-        SUCCESSFUL,
-    }
+
     // general action methods
     // two type of action: () -> boolean , int -> boolean
     public Result earnMoney() {
@@ -85,19 +96,23 @@ public abstract class Player implements Configured {
             coins += 2;
             return Result.SUCCESSFUL;
         }
-        return Result.UNSUCCESSFUL;
+        return Result.PREVENTED;
     }
-    public Result exchangeCard(int cartIndex) {
-        if (coins < 1) return Result.CAN_NOT;
-        memory.memorizeExchangeCard(seatNumber, cartIndex);
+    public Result exchangeCard() {
+        if (coins < 1) return Result.CAN_NOT(1);
+        memory.memorizeExchangeCard(seatNumber);
         --coins;
-        Cart cart = takeOneCartToExchange();
+        Cart cart = carts.remove(takeOneCartToExchangeIndex());
         Court.getInstance().returnCarts(Arrays.asList(cart));
+        carts.add(Court.getInstance().getACart());
         return Result.SUCCESSFUL;
     }
     public Result coup(int playerIndex) {
-        if (coins < 7) return Result.CAN_NOT;
+        if (coins < 7) return Result.CAN_NOT(7 - coins);
+
+        Command.getInstance().showTarget(playerIndex);
         memory.memorizeCoup(seatNumber, playerIndex);
+
         coins -= 7;
         memory.getPlayer(playerIndex).toBeKilled();
         return Result.SUCCESSFUL;
@@ -105,86 +120,108 @@ public abstract class Player implements Configured {
 
     // character action methods
     public Result taxCollection() {
-        if (askForChallenge() && askForReactionWithReceiveForeignAid()) {
-            memory.memorizeTaxCollection(seatNumber);
+        memory.memorizeTaxCollection(seatNumber);
+        if (askForChallenge()) {
             coins += 3;
             return Result.SUCCESSFUL;
         }
-        return Result.UNSUCCESSFUL;
+        return Result.DEFEAT_CHALLENGE;
     }
     public Result murder(int playerIndex) {
-        if (coins < 3) return Result.CAN_NOT;
-        coins -= 3;
+        if (coins < 3) return Result.CAN_NOT(3 - coins);
+
+        Command.getInstance().showTarget(playerIndex);
         memory.memorizeMurder(seatNumber, playerIndex);
-        if (askForChallenge() && askForReactionWithMurder()) {
-            memory.getPlayer(playerIndex).toBeKilled();
-            return Result.SUCCESSFUL;
+
+        if (askForChallenge()) {
+            coins -= 3;
+            if (askForReactionWithMurder()) {
+                memory.getPlayer(playerIndex).toBeKilled();
+                return Result.SUCCESSFUL;
+            }
+            return Result.PREVENTED;
         }
-        return Result.UNSUCCESSFUL; //its lost turn
+        return Result.DEFEAT_CHALLENGE; //its lost turn
     }
 
     public Result corruption(int playerIndex) {
-        //ki challenge ki reaction
-        if (askForChallenge() && askForReactionWithCorruption()) {
-            memory.memorizeCorruption(seatNumber, playerIndex);
-            coins += memory.getPlayer(playerIndex).toBeRansom();
-            return Result.SUCCESSFUL;
+        Command.getInstance().showTarget(playerIndex);
+        memory.memorizeCorruption(seatNumber, playerIndex);
+
+        if (askForChallenge()) {
+            if (askForReactionWithCorruption()) {
+                coins += memory.getPlayer(playerIndex).toBeRansom();
+                return Result.SUCCESSFUL;
+            }
+            return Result.PREVENTED;
         }
-        return Result.UNSUCCESSFUL;
+        return Result.DEFEAT_CHALLENGE;
     }
 
     public Result exchange() {
-        if (coins < 2) return Result.CAN_NOT;
+        if (coins < 2) return Result.CAN_NOT(2 - coins);
+
+        memory.memorizeExchange(seatNumber);
+
         if (askForChallenge()) {
-            memory.memorizeExchange(seatNumber);
             coins -= 2;
-            ArrayList<Cart> carts = Court.getTwoCart();
+            ArrayList<Cart> carts = Court.getInstance().getTwoCart();
             Court.getInstance().returnCarts(changeCart(carts));
             return Result.SUCCESSFUL;
         }
-        return Result.UNSUCCESSFUL;
+        return Result.DEFEAT_CHALLENGE;
     }
 
     // reaction methods
     public Result preventMurder(int playerIndex) {
-        if (!isAlive()) return Result.CAN_NOT;
-
+        Command.getInstance().showPreventGuy(seatNumber);
         memory.memorizePreventMurder(seatNumber, playerIndex);
-        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
+        boolean tmp = askForChallenge();
+
+        Command.getInstance().unColorPlayer(seatNumber);
+        return (tmp ? Result.SUCCESSFUL : Result.DEFEAT_CHALLENGE);
     }
     public Result preventCorruption(int playerIndex) {
-        if (!isAlive()) return Result.CAN_NOT;
-
+        Command.getInstance().showPreventGuy(seatNumber);
         memory.memorizePreventCorruption(seatNumber, playerIndex);
-        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
+        boolean tmp = askForChallenge();
+
+        Command.getInstance().unColorPlayer(seatNumber);
+        return (tmp ? Result.SUCCESSFUL : Result.DEFEAT_CHALLENGE);
     }
     public Result preventReceiveForeignAid(int playerIndex) {
-        if (!isAlive()) return Result.CAN_NOT;
-
+        Command.getInstance().showPreventGuy(seatNumber);
         memory.memorizePreventReceiveForeignAid(seatNumber, playerIndex);
-        return (askForChallenge() ? Result.SUCCESSFUL : Result.UNSUCCESSFUL);
+        boolean tmp = askForChallenge();
+
+        Command.getInstance().unColorPlayer(seatNumber);
+        return (tmp ? Result.SUCCESSFUL : Result.DEFEAT_CHALLENGE);
     }
 
     // risky method
     public Result challenge(int playerIndex) {
-        if (!isAlive()) return Result.CAN_NOT;
+        Command.getInstance().showChallengeGuy(seatNumber);
+        memory.memorizeChallenge(seatNumber, playerIndex);
 
         if (prove(memory.getClaimedCard())) {
             toBeKilled();
-            return Result.UNSUCCESSFUL;
+            Command.getInstance().unColorPlayer(seatNumber);
+            return new Result(Result.Type.UNSUCCESSFUL, "make wrong!");
         } else {
             memory.getPlayer(playerIndex).toBeKilled();
-            return Result.SUCCESSFUL;
+            Command.getInstance().unColorPlayer(seatNumber);
+            return new Result(Result.Type.SUCCESSFUL, "good guss");
         }
     }
 
     // operational methods
-    private boolean askForChallenge() {
+    protected boolean askForChallenge() {
+        Command.getInstance().update();
         Player player = this.next();
         for (int t = 0;t < 3;++t) {
-            if(player.decisionToChallenge()) {
+            if(player.isAlive() && player.decisionToChallenge()) {
                 //it will challenge
-                if (player.challenge(seatNumber) == Result.SUCCESSFUL) {
+                if (player.challenge(seatNumber).isSuccessful()) {
                     return false;
                 } else {
                     return true;
@@ -195,11 +232,12 @@ public abstract class Player implements Configured {
         return true;
     }
     private boolean askForReactionWithMurder() {
+        Command.getInstance().update();
         Player player = this.next();
         for (int t = 0;t < 3;++t) {
-            if(player.decisionToPreventMurder(seatNumber)) {
+            if(player.isAlive() && player.decisionToPreventMurder(seatNumber)) {
                 //it will challenge
-                if (player.preventReceiveForeignAid(seatNumber) == Result.SUCCESSFUL) {
+                if (player.preventMurder(seatNumber).isSuccessful()) {
                     return false;
                 } else {
                     return true;
@@ -210,11 +248,12 @@ public abstract class Player implements Configured {
         return true;
     }
     private boolean askForReactionWithReceiveForeignAid() {
+        Command.getInstance().update();
         Player player = this.next();
         for (int t = 0;t < 3;++t) {
-            if(player.decisionToPreventReceiveForeignAid(seatNumber)) {
+            if(player.isAlive() && player.decisionToPreventReceiveForeignAid(seatNumber)) {
                 //it will challenge
-                if (player.preventMurder(seatNumber) == Result.SUCCESSFUL) {
+                if (player.preventReceiveForeignAid(seatNumber).isSuccessful()) {
                     return false;
                 } else {
                     return true;
@@ -225,11 +264,12 @@ public abstract class Player implements Configured {
         return true;
     }
     private boolean askForReactionWithCorruption() {
+        Command.getInstance().update();
         Player player = this.next();
         for (int t = 0;t < 3;++t) {
-            if(player.decisionToPreventCorruption(seatNumber)) {
+            if(player.isAlive() && player.decisionToPreventCorruption(seatNumber)) {
                 //it will challenge
-                if (player.preventCorruption(seatNumber) == Result.SUCCESSFUL) {
+                if (player.preventCorruption(seatNumber).isSuccessful()) {
                     return false;
                 } else {
                     return true;
@@ -241,13 +281,18 @@ public abstract class Player implements Configured {
     }
 
     private boolean prove(Cart claimedCard) {
+        for (int i = 0; i < carts.size(); i++) {
+            if (carts.get(i) == claimedCard) return true;
+        }
         return false;
     }
     protected void discard(int index) {
         deadCarts.add(carts.remove(index));
     }
     private int toBeRansom() {
-        return 0;
+        int pay = Math.min(2, coins);
+        coins -= pay;
+        return pay;
     }
     protected abstract void toBeKilled();
 
@@ -256,7 +301,11 @@ public abstract class Player implements Configured {
     protected abstract boolean decisionToPreventCorruption(int playerIndex);
 
     protected abstract boolean decisionToChallenge();
-    protected abstract Cart takeOneCartToExchange();
+    protected abstract int takeOneCartToExchangeIndex();
     protected abstract ArrayList<Cart> changeCart(ArrayList<Cart> newCarts);
 
+    protected void swap(ArrayList<Cart> newCarts, int cartFromNewCartsIndex, int cartFromCartsWantToChange) {
+        newCarts.set(cartFromNewCartsIndex,
+                carts.set(cartFromCartsWantToChange, newCarts.get(cartFromNewCartsIndex)));
+    }
 }

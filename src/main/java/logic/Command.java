@@ -4,13 +4,15 @@ import gui.*;
 import logic.eventhandler.ObjectiveActionHandler;
 import logic.eventhandler.SelectingHandler;
 import logic.eventhandler.SubjectiveActionHandler;
-import models.Cart;
-import models.Court;
-import models.Memory;
-import models.Player;
+import models.*;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Command {
@@ -22,7 +24,7 @@ public class Command {
     private GameFrame gameFrame = new GameFrame();
     private PlayerHand[] playerHands = new PlayerHand[4];
     User user;
-    private Function<Integer, Player.Result> selectedAction;
+    private Function<Integer, Result> selectedAction;
 
     public Command() {
         user = new User("ali");
@@ -36,27 +38,47 @@ public class Command {
         gameFrame.update();
     }
 
+    //BOARD COLORING METHODS
     public void showWiner(Player player) {
         playerHands[player.getSeatNumber()].paintBorderYellow();
+    }
+
+    public void showPlayer(int seatNumber) {
+        playerHands[seatNumber].paintBorderGreen();
+    }
+    public void showTarget(int seatNumber) {
+        playerHands[seatNumber].paintBorderRed();
+    }
+    public void showPreventGuy(int seatNumber) {
+        playerHands[seatNumber].paintBorderBlue();
+    }
+    public void showChallengeGuy(int seatNumber) {
+        playerHands[seatNumber].paintBorderOrange();
+    }
+    public void unColorPlayer(int seatNumber) {
+        playerHands[seatNumber].unColorBoard();
+    }
+    public void unColor() {
+        for (int i = 0; i < 4; i++) {
+            unColorPlayer(i);
+        }
     }
 
     private PlayerHand getHand(Player player) {
         return playerHands[player.getSeatNumber()];
     }
-    private void setHand(Player player) {
-        playerHands[player.getSeatNumber()] = new BotHand(player.getName());
-    }
     private void madePanelHands() {
-        setHand(user);
+        playerHands[user.getSeatNumber()] = new UserHand(user.getName());
         gameFrame.setHand(getHand(user).getPanel(), 0);
-        Player bot = user.next();
+        Player bot = user;
         for (int t = 0; t < 3; t++) {
-            setHand(bot);
-            gameFrame.setHand(playerHands[bot.getSeatNumber()].getPanel(), t + 1);
             bot = bot.next();
+            playerHands[bot.getSeatNumber()] = new BotHand(bot.getName());
+            gameFrame.setHand(playerHands[bot.getSeatNumber()].getPanel(), t + 1);
         }
     }
     private void showHands() {
+        //TODO
         Player player = user;
         for (int t = 0;t < 4;++t) {
             showHandFor(player);
@@ -82,11 +104,19 @@ public class Command {
         instance.user.tryToPlay();
     }
 
-    public Player getUser() {
+    public User getUser() {
         return user;
     }
 
+
     public void update() {
+        showHands();
+        gameFrame.update();
+        for (int i = 0; i < 4; i++) {
+            playerHands[i].update();
+        }
+    }
+    public void updateHands() {
         showHands();
         gameFrame.update();
     }
@@ -96,11 +126,12 @@ public class Command {
             playerHands[i].removeAllHandler();
         }
     }
-
-    public void showPlayer(int seatNumber) {
-        playerHands[seatNumber].paintBorderGreen();
+    public void removeUserCartHandler() {
+        getHand(user).removeAllHandler();
     }
-
+    public void removeCourtHandler() {
+        CourtPanel.getInstance().removeAllHandler();
+    }
     public void showActionsLists() {
         if (ActionsList.getCharacterInstance() == null) {
             ActionsList.construct();
@@ -116,6 +147,9 @@ public class Command {
         gameFrame.showActionsLists();
         update();
     }
+    public void closeActionLists() {
+        gameFrame.closeActionLists();
+    }
     public void addGeneralAction(Memory.SubjectiveActionType type) {
         ActionsList.getGeneralInstance().addAction(
                 type.getMessage(),
@@ -124,27 +158,25 @@ public class Command {
     public void addCharacterAction(Memory.ObjectiveActionType type) {
         ActionsList.getCharacterInstance().addAction(
                 type.getMessage(),
-                new ObjectiveActionHandler(type.getFunction(),
-                        type != Memory.ObjectiveActionType.EXCHANGE_CARD));
-    }
-    public void handelSubjectiveAction(Callable<Player.Result> action) throws Exception {
-        handelActionResult(action.call());
+                new ObjectiveActionHandler(type.getFunction()));
     }
 
-    public void setSelectedAction(Function<Integer, Player.Result> selectedAction) {
-        this.selectedAction = selectedAction;
+    public void handelSubjectiveAction(Callable<Result> action) throws Exception {
+        Result result = action.call();
+        if (result.isNotComplete()) return;
+        handelActionResult(result);
     }
-
-    public void handelObjectiveAction(Function<Integer, Player.Result> action) {
+    public void handelObjectiveAction(Function<Integer, Result> action) {
         this.selectedAction = action;
+        addPlayerSelector();
     }
-    private void handelActionResult(Player.Result result) {
-        switch (result) {
+    public void handelActionResult(Result result) {
+        switch (result.getType()) {
             case CAN_NOT:
-                handelCanNot();
+                confirmUser(result.getMessage());
                 break;
             case UNSUCCESSFUL:
-                handelUnsuccessful();
+                confirmUser(result.getMessage());
                 takeUserTurn();
                 break;
             case SUCCESSFUL:
@@ -153,24 +185,27 @@ public class Command {
         gameFrame.update();
     }
 
-    private void takeUserTurn() {
+    public void takeUserTurn() {
+        removeAllHandler();
+        closeActionLists();
         user.next().tryToPlay(); //continue for other bots
     }
+
+    /*
     private void handelUnsuccessful() {
-        //TODO
+        JOptionPane.showMessageDialog(gameFrame.getPanel(), "unsuccessful!");
     }
     private void handelCanNot() {
-        //show joption pane
-        //TODO
-    }
+        JOptionPane.showMessageDialog(gameFrame.getPanel(), "can't do it!");
+    }*/
 
-    public void addCartSelectorForExchangeCart() {
+    public void addCartSelectorToUser(Consumer<Integer> action) {
         for (int t = 0; t < user.getCarts().size(); t++) {
-            getHand(user).addSelectorForCart(t, new SelectingHandler(t) {
+            ((UserHand) getHand(user)).addSelectorForCart(t, new SelectingHandler(t) {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
-                    Command.getInstance().handelActionResult(user.exchangeCard(index));
+                    action.accept(index);
                 }
             });
         }
@@ -178,13 +213,102 @@ public class Command {
 
     public void addPlayerSelector() {
         for (int i = 0; i < 4; i++) if (i != user.getSeatNumber()) {
-            playerHands[i].addSelector(new SelectingHandler(i){
+            ((BotHand) playerHands[i]).addSelector(new SelectingHandler(i){
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
-                    Command.getInstance().handelActionResult(selectedAction.apply(index));
+                    handelActionResult(selectedAction.apply(index));
+                    removeAllHandler();
                 }
             });
         }
+    }
+
+    public boolean askYesNoQuestionWithMessage(String message) {
+        while (true) {
+            int n = JOptionPane.showConfirmDialog(
+                    gameFrame.getPanel(), message,
+                    "No",
+                    JOptionPane.YES_NO_OPTION);
+            if (n == JOptionPane.YES_OPTION) {
+                return true;
+            } else if (n == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
+    }
+
+    public void confirmUser(String message) {
+        while (true) {
+            int n = JOptionPane.showConfirmDialog(
+                    gameFrame.getPanel(), message,
+                    "OK",
+                    JOptionPane.OK_OPTION);
+            if (n == JOptionPane.OK_OPTION) {
+                break;
+            }
+        }
+    }
+
+    public void colorUserHand(int index) {
+        ((UserHand) getHand(user)).colorHand(index);
+    }
+    public void addCartSelectorToCourt(ArrayList<Cart> newCarts, Consumer<Integer> handelSelectedCartFromCourtForExchange) {
+        for (int i = 0; i < 2; i++) {
+            CourtPanel.getInstance().addCartToShow(i, newCarts.get(i).getName());
+            CourtPanel.getInstance().addMouseListener(i, new SelectingHandler(i) {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    handelSelectedCartFromCourtForExchange.accept(index);
+                }
+            });
+        }
+    }
+
+    public void addOkButtonForExchange() {
+        gameFrame.showOkButton();
+    }
+
+    public void colorCourt(int index) {
+        CourtPanel.getInstance().colorHand(index);
+    }
+    public void unColorSelectedCart() {
+        ((UserHand) getHand(user)).unColor();
+        CourtPanel.getInstance().unColor();
+    }
+
+    public int addCartSelectorToDiscard() {
+            JDialog.setDefaultLookAndFeelDecorated(true);
+            JOptionPane optionPane = new JOptionPane("select cart to discard",
+                    JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.YES_NO_OPTION, null, new String[] {"cart1", "cart2"});
+
+
+            JDialog dialog = optionPane.createDialog("Select cart");
+            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+            Timer timer = new Timer(5000, e -> dialog.setVisible(false));
+            timer.setRepeats(false);
+            timer.start();
+
+            dialog.setVisible(true);
+
+            if (optionPane.getValue() instanceof Integer) {
+                int option = (Integer) optionPane.getValue();
+
+                if (option == JOptionPane.NO_OPTION) {
+                    return 0;
+                }
+                else if (option == JOptionPane.YES_OPTION) {
+                    return 1;
+                }
+            }
+            else {
+               return 0;
+            }
+
+            System.out.println("Outside code.");
+            return -1;
     }
 }
