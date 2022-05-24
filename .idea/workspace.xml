@@ -4,26 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c712996a-9b7d-4c51-8d07-24e5ac3bc60d" name="Changes" comment="after lot work">
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/Manual.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/Manual.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/manual properties.json" afterDir="false" />
+    <list default="true" id="c712996a-9b7d-4c51-8d07-24e5ac3bc60d" name="Changes" comment="tahvili">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/ConfigHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/GameFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/PanelDesigner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/PanelDesigner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/CautiousKiller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Cow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Cow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Paranoid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Revolutionary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Memory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hand cart.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hand cart.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/player seats.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/player seats.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/cart image/backward.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/cart image/manual1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/cart image/manual2.jpeg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +87,21 @@
       <option name="project" value="LOCAL" />
       <updated>1653268301703</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="tahvili">
+      <created>1653316733474</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1653316733474</updated>
+    </task>
+    <task id="LOCAL-00004" summary="tahvili">
+      <created>1653316896405</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1653316896406</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -120,7 +119,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="some gui" />
     <MESSAGE value="after lot work" />
-    <option name="LAST_COMMIT_MESSAGE" value="after lot work" />
+    <MESSAGE value="tahvili" />
+    <option name="LAST_COMMIT_MESSAGE" value="tahvili" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
